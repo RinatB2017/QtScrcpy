@@ -87,6 +87,16 @@ void AdbProcess::execute(const QString &serial, const QStringList &args)
         adbArgs << "-s" << serial;
     }
     adbArgs << args;
+
+    //TODO вывод команд
+    qDebug() << "-----";
+    //qDebug() << sender()->objectName();
+    foreach (QString text, adbArgs)
+    {
+        qDebug() << text;
+    }
+    qDebug() << "-----";
+
     qDebug() << getAdbPath() << adbArgs.join(" ");
     start(getAdbPath(), adbArgs);
 }
@@ -172,7 +182,9 @@ QString AdbProcess::getErrorOut()
     return m_errorOutput;
 }
 
-void AdbProcess::forward(const QString &serial, quint16 localPort, const QString &deviceSocketName)
+void AdbProcess::forward(const QString &serial,
+                         quint16 localPort,
+                         const QString &deviceSocketName)
 {
     QStringList adbArgs;
     adbArgs << "forward";

@@ -16,18 +16,20 @@
 #include "videoform.h"
 extern "C"
 {
-#include "libavutil/imgutils.h"
+    #include "libavutil/imgutils.h"
 }
 
 Device::Device(DeviceParams params, QObject *parent) : QObject(parent), m_params(params)
 {
-    if (!params.display && m_params.recordFileName.trimmed().isEmpty()) {
+    if (!params.display && m_params.recordFileName.trimmed().isEmpty())
+    {
         qCritical("not display must be recorded");
         deleteLater();
         return;
     }
 
-    if (params.display) {
+    if (params.display)
+    {
         m_vb = new VideoBuffer();
         m_vb->init(params.renderExpiredFrames);
         m_decoder = new Decoder(m_vb, this);
@@ -38,11 +40,13 @@ Device::Device(DeviceParams params, QObject *parent) : QObject(parent), m_params
     }
 
     m_stream = new Stream(this);
-    if (m_decoder) {
+    if (m_decoder)
+    {
         m_stream->setDecoder(m_decoder);
     }
     m_server = new Server(this);
-    if (!m_params.recordFileName.trimmed().isEmpty()) {
+    if (!m_params.recordFileName.trimmed().isEmpty())
+    {
         m_recorder = new Recorder(m_params.recordFileName);
         m_stream->setRecoder(m_recorder);
     }
@@ -52,22 +56,27 @@ Device::Device(DeviceParams params, QObject *parent) : QObject(parent), m_params
 
 Device::~Device()
 {
-    if (m_server) {
+    if (m_server)
+    {
         m_server->stop();
     }
     // server must stop before decoder, because decoder block main thread
-    if (m_stream) {
+    if (m_stream)
+    {
         m_stream->stopDecode();
     }
 
-    if (m_recorder) {
+    if (m_recorder)
+    {
         delete m_recorder;
     }
-    if (m_vb) {
+    if (m_vb)
+    {
         m_vb->deInit();
         delete m_vb;
     }
-    if (m_videoForm) {
+    if (m_videoForm)
+    {
         m_videoForm->close();
         delete m_videoForm;
     }
@@ -92,7 +101,8 @@ const QString &Device::getSerial()
 const QSize Device::frameSize()
 {
     QSize size;
-    if (!m_videoForm) {
+    if (!m_videoForm)
+    {
         return size;
     }
     return m_videoForm->frameSize();
@@ -100,7 +110,8 @@ const QSize Device::frameSize()
 
 void Device::updateScript(QString script)
 {
-    if (m_controller) {
+    if (m_controller)
+    {
         m_controller->updateScript(script);
     }
 }
@@ -220,7 +231,8 @@ void Device::initSignals()
                     // must be show before updateShowSize
                     m_videoForm->show();
 
-                    m_videoForm->setWindowTitle(deviceName);
+                    //TODO добавление deviceName
+                    m_videoForm->setWindowTitle(QString("deviceName: %1").arg(deviceName));
                     m_videoForm->updateShowSize(size);
 
                     bool deviceVer = size.height() > size.width();

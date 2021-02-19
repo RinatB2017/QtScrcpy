@@ -20,6 +20,14 @@ Server::Server(QObject *parent) : QObject(parent)
 
     connect(&m_serverSocket, &QTcpServer::newConnection, this, [this]() {
         QTcpSocket *tmp = m_serverSocket.nextPendingConnection();
+
+        //TODO открывает локальный сокет
+        QHostAddress la = tmp->localAddress();
+        quint16 lp = tmp->localPort();
+
+        qDebug() << la << lp;
+        //---
+
         if (dynamic_cast<VideoSocket *>(tmp)) {
             m_videoSocket = dynamic_cast<VideoSocket *>(tmp);
             if (!m_videoSocket->isValid() || !readInfo(m_videoSocket, m_deviceName, m_deviceSize)) {

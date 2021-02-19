@@ -57,6 +57,7 @@ void VideoSocket::onReadyRead()
     QMutexLocker locker(&m_mutex);
     if (m_buffer && m_bufferSize <= bytesAvailable()) {
         // recv data
+        //TODO чтение данных
         qint64 readSize = qMin(bytesAvailable(), (qint64)m_bufferSize);
         m_dataSize = read((char *)m_buffer, readSize);
 

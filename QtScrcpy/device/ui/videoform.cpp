@@ -159,6 +159,7 @@ void VideoForm::updateRender(const AVFrame *frame)
 
     updateShowSize(QSize(frame->width, frame->height));
     m_videoWidget->setFrameSize(QSize(frame->width, frame->height));
+    //TODO отображение frame
     m_videoWidget->updateTextures(frame->data[0], frame->data[1], frame->data[2], frame->linesize[0], frame->linesize[1], frame->linesize[2]);
 }
 

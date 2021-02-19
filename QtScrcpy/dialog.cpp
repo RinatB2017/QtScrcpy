@@ -31,7 +31,8 @@ Dialog::Dialog(QWidget *parent) : QDialog(parent), ui(new Ui::Dialog)
             break;
         case AdbProcess::AER_ERROR_EXEC:
             //log = m_adb.getErrorOut();
-            if (args.contains("ifconfig") && args.contains("wlan0")) {
+            if (args.contains("ifconfig") && args.contains("wlan0"))
+            {
                 getIPbyIp();
             }
             break;
@@ -40,29 +41,37 @@ Dialog::Dialog(QWidget *parent) : QDialog(parent), ui(new Ui::Dialog)
             break;
         case AdbProcess::AER_SUCCESS_EXEC:
             //log = m_adb.getStdOut();
-            if (args.contains("devices")) {
+            if (args.contains("devices"))
+            {
                 QStringList devices = m_adb.getDevicesSerialFromStdOut();
                 ui->serialBox->clear();
-                for (auto &item : devices) {
+                for (auto &item : devices)
+                {
                     ui->serialBox->addItem(item);
                 }
-            } else if (args.contains("show") && args.contains("wlan0")) {
+            } else if (args.contains("show") && args.contains("wlan0"))
+            {
                 QString ip = m_adb.getDeviceIPFromStdOut();
-                if (ip.isEmpty()) {
+                if (ip.isEmpty())
+                {
                     log = "ip not find, connect to wifi?";
                     break;
                 }
                 ui->deviceIpEdt->setText(ip);
-            } else if (args.contains("ifconfig") && args.contains("wlan0")) {
+            } else if (args.contains("ifconfig") && args.contains("wlan0"))
+            {
                 QString ip = m_adb.getDeviceIPFromStdOut();
-                if (ip.isEmpty()) {
+                if (ip.isEmpty())
+                {
                     log = "ip not find, connect to wifi?";
                     break;
                 }
                 ui->deviceIpEdt->setText(ip);
-            } else if (args.contains("ip -o a")) {
+            } else if (args.contains("ip -o a"))
+            {
                 QString ip = m_adb.getDeviceIPByIpFromStdOut();
-                if (ip.isEmpty()) {
+                if (ip.isEmpty())
+                {
                     log = "ip not find, connect to wifi?";
                     break;
                 }
@@ -70,7 +79,8 @@ Dialog::Dialog(QWidget *parent) : QDialog(parent), ui(new Ui::Dialog)
             }
             break;
         }
-        if (!log.isEmpty()) {
+        if (!log.isEmpty())
+        {
             outLog(log, newLine);
         }
     });
@@ -132,7 +142,8 @@ void Dialog::initUI()
 
 void Dialog::execAdbCmd()
 {
-    if (checkAdbRun()) {
+    if (checkAdbRun())
+    {
         return;
     }
     QString cmd = ui->adbCommandEdt->text().trimmed();
@@ -167,9 +178,11 @@ void Dialog::on_startServerBtn_clicked()
     outLog("start server...", false);
 
     QString absFilePath;
-    if (ui->recordScreenCheck->isChecked()) {
+    if (ui->recordScreenCheck->isChecked())
+    {
         QString fileDir(ui->recordPathEdt->text().trimmed());
-        if (!fileDir.isEmpty()) {
+        if (!fileDir.isEmpty())
+        {
             QDateTime dateTime = QDateTime::currentDateTime();
             QString fileName = dateTime.toString("_yyyyMMdd_hhmmss_zzz");
             QString ext = ui->formatBox->currentText().trimmed();
@@ -198,7 +211,8 @@ void Dialog::on_startServerBtn_clicked()
 
     m_deviceManage.connectDevice(params);
 
-    if (ui->alwaysTopCheck->isChecked()) {
+    if (ui->alwaysTopCheck->isChecked())
+    {
         m_deviceManage.staysOnTop(params.serial);
     }
     m_deviceManage.showFPS(params.serial, ui->fpsCheck->isChecked());
